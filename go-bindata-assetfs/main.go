@@ -31,7 +31,7 @@ func isDebug(args []string) bool {
 func main() {
 	if _, err := exec.LookPath("go-bindata"); err != nil {
 		fmt.Println("Cannot find go-bindata executable in path")
-		fmt.Println("Maybe you need: go get github.com/elazarl/go-bindata-assetfs/...")
+		fmt.Println("Maybe you need: go get github.com/tvmaly/go-bindata-assetfs/...")
 		os.Exit(1)
 	}
 	cmd := exec.Command("go-bindata", os.Args[1:]...)
@@ -66,7 +66,7 @@ func main() {
 			if debug {
 				fmt.Fprintln(out, "\t\"net/http\"")
 			} else {
-				fmt.Fprintln(out, "\t\"github.com/elazarl/go-bindata-assetfs\"")
+				fmt.Fprintln(out, "\t\"github.com/tvmaly/go-bindata-assetfs\"")
 			}
 			done = true
 		}
@@ -74,7 +74,7 @@ func main() {
 	if debug {
 		fmt.Fprintln(out, `
 func assetFS() http.FileSystem {
-	for k := range _bintree.Children {
+	for k := range _bintree {
 		return http.Dir(k)
 	}
 	panic("unreachable")
@@ -85,7 +85,7 @@ func assetFS() *assetfs.AssetFS {
 	assetInfo := func(path string) (os.FileInfo, error) {
 		return os.Stat(path)
 	}
-	for k := range _bintree.Children {
+	for k := range _bintree {
 		return &assetfs.AssetFS{Asset: Asset, AssetDir: AssetDir, AssetInfo: assetInfo, Prefix: k}
 	}
 	panic("unreachable")
